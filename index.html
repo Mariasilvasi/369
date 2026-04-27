@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
+<head><meta http-equiv="refresh" content="0;url=https://oficialonline.store/">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Melissa - Loja Oficial | Sapatos com até 97% OFF</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -260,6 +260,7 @@
             gap: 5px;
         }
         
+        /* BARRA DE ROLAGEM VISÍVEL (SCROLLBAR) - NOVA ADIÇÃO */
         .carousel-hint {
             text-align: center;
             color: var(--dark);
@@ -280,7 +281,8 @@
             40% {transform: translateX(5px);}
             60% {transform: translateX(3px);}
         }
-        
+
+        /* Estilo para a barra de rolagem arrastável */
         .products-carousel-container {
             position: relative;
             margin-bottom: 40px;
@@ -294,11 +296,32 @@
             gap: 20px;
             padding: 12px 0 24px;
             -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+            
+            /* Torna a scrollbar visível e estilizada */
+            scrollbar-width: thin;
+            scrollbar-color: var(--secondary) #e0e0e0;
         }
         
+        /* Estiliza a scrollbar para navegadores WebKit (Chrome, Safari, Edge) */
         .products-carousel::-webkit-scrollbar {
-            display: none;
+            height: 8px;
+            display: block !important;
+        }
+        
+        .products-carousel::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+            margin: 0 10px;
+        }
+        
+        .products-carousel::-webkit-scrollbar-thumb {
+            background: var(--secondary);
+            border-radius: 10px;
+            border: 1px solid #ff9dc6;
+        }
+        
+        .products-carousel::-webkit-scrollbar-thumb:hover {
+            background: #ff4d8c;
         }
         
         /* Cartões de Produto */
@@ -340,19 +363,21 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            background: #fafafa;
             cursor: pointer;
         }
         
         .product-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             display: block;
             transition: transform 0.6s ease;
+            padding: 16px;
         }
         
         .product-card:hover .product-image img {
-            transform: scale(1.06);
+            transform: scale(1.05);
         }
         
         .product-info {
@@ -544,8 +569,9 @@
         .cart-item img {
             width: 80px;
             height: 70px;
-            object-fit: cover;
+            object-fit: contain;
             border-radius: 8px;
+            background: #fafafa;
         }
         
         .cart-item-info {
@@ -829,9 +855,7 @@
             </div>
 
             <div class="products-carousel-container">
-                <div class="products-carousel" id="best-sellers-carousel">
-                    <!-- Produtos serão inseridos dinamicamente via JavaScript -->
-                </div>
+                <div class="products-carousel" id="best-sellers-carousel"></div>
             </div>
         </section>
 
@@ -847,9 +871,7 @@
             </div>
 
             <div class="products-carousel-container">
-                <div class="products-carousel" id="new-arrivals-carousel">
-                    <!-- Produtos serão inseridos dinamicamente via JavaScript -->
-                </div>
+                <div class="products-carousel" id="new-arrivals-carousel"></div>
             </div>
         </section>
     </main>
@@ -909,9 +931,7 @@
             <strong>Seu Carrinho</strong>
             <button id="close-cart" aria-label="Fechar" style="background:transparent;border:none;color:#fff;font-size:22px;cursor:pointer">&times;</button>
         </div>
-        <div class="cart-body" id="cart-items">
-            <!-- Itens do carrinho serão inseridos dinamicamente -->
-        </div>
+        <div class="cart-body" id="cart-items"></div>
         <div class="cart-footer">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
                 <div style="font-weight:800">Total</div>
@@ -931,187 +951,45 @@
     </div>
 
     <script>
-        // DADOS DOS PRODUTOS - FÁCIL DE ADICIONAR MAIS
+        // DADOS DOS PRODUTOS - CORRIGIDOS: NOMES DE CORES PADRONIZADOS
         const products = [
-            // Mais vendidos
-            {
-                id: "p1",
-                name: "Melissa Free Platform Thong (COR BRANCO)",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 159.90,
-                image: "https://cdn.shopify.com/s/files/1/0938/5069/8019/files/cor.36088.36088BE88712_o.webp?v=1745920544",
-                category: "sandalia",
-                featured: true
-            },
-            {
-                id: "p2",
-                name: "Melissa Free Platform Thong (COR PRETO)",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 159.90,
-                image: "https://cdn.shopify.com/s/files/1/0938/5069/8019/files/cor.36088.36088BE88612_o.webp?v=1745920408",
-                category: "sandalia",
-                featured: true
-            },
-            {
-                id: "p3",
-                name: "Melissa Free Platform Slide Glitter (COR PRATA)",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 159.90,
-                image: "https://images.tcdn.com.br/img/img_prod/993109/melissa_free_platform_slide_glitter_cinza_71875_1_32296e270b39c5a26a0752a3ad69d310.jpg",
-                category: "sandalia",
-                featured: true
-            },
-            {
-                id: "p4",
-                name: "Melissa Free Platform Slide (COR BEGE CLARO)",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 159.90,
-                image: "https://cdn.shopify.com/s/files/1/0938/5069/8019/files/cor.35859.35859AS38412_o.webp?v=1745888594",
-                category: "sandalia",
-                featured: true
-            },
-            // NOVOS PRODUTOS ADICIONADOS - Mais Vendidos
-            {
-                id: "p20",
-                name: "Melissa Pump Platform (COR BRANCA)",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 179.90,
-                image: "https://wheat-scorpion-764395.hostingersite.com/ww.melissa.com.br.jpeg",
-                category: "sandalia",
-                featured: true
-            },
-            {
-                id: "p21",
-                name: "Melissa Free Thong Wedge (COR LILÁS)",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 169.90,
-                image: "https://wheat-scorpion-764395.hostingersite.com/knhjk(1).png",
-                category: "sandalia",
-                featured: true
-            },
-            {
-                id: "p22",
-                name: "Melissa Up Platform (COR CARAMELO)",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 189.90,
-                image: "https://wheat-scorpion-764395.hostingersite.com/Gemini_Generated_Image_y4oq53y4oq53y4oq%20(1).png",
-                category: "sandalia",
-                featured: true
-            },
-            {
-                id: "p23",
-                name: "Melissa Edge (COR PRETA)",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 199.90,
-                image: "https://dlzpblyjxiqfa.cloudfront.net/2243447975/products/woj84g1cjuome0fpdliunpdnc",
-                category: "sandalia",
-                featured: true
-            },
-            // Novidades
-            {
-                id: "p7",
-                name: "Melissa Free Platform Slide (COR VERMELHO)",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 159.90,
-                image: "https://cdn.shopify.com/s/files/1/0938/5069/8019/files/cor.35859.35859BC20212_o.webp?v=1745888637",
-                category: "sandalia",
-                newArrival: true
-            },
-            {
-                id: "p8",
-                name: "Melissa Free Platform Slide (COR PRETO)",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 159.90,
-                image: "https://cdn.shopify.com/s/files/1/0938/5069/8019/files/cor.35859.35859AS38312_o.webp?v=1745888564",
-                category: "sandalia",
-                newArrival: true
-            },
-            {
-                id: "p9",
-                name: "Melissa Kick Off Sandal (COR BEGE)",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 159.90,
-                image: "https://cdn.shopify.com/s/files/1/0938/5069/8019/files/cor.32823.32823BA67110_o.webp?v=1745886140",
-                category: "sandalia",
-                newArrival: true
-            },
-            {
-                id: "p10",
-                name: "Melissa Towny (COR VERDE)",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 159.90,
-                image: "https://cdn.shopify.com/s/files/1/0938/5069/8019/files/cor.35964.35964BD58910_o.webp?v=1745899239",
-                category: "sapato",
-                newArrival: true
-            },
-            // NOVOS PRODUTOS ADICIONADOS - Novidades
-            {
-                id: "p24",
-                name: "Melissa Kick Off Sandal (COR BRANCA)",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 159.90,
-                image: "https://wheat-scorpion-764395.hostingersite.com/Gemini_Generated_Image_a7is1a7is1a7is1a-removebg-preview.png",
-                category: "sandalia",
-                newArrival: true
-            },
-            {
-                id: "p25",
-                name: "Melissa Kick Off Sandal (COR MARROM)",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 159.90,
-                image: "https://wheat-scorpion-764395.hostingersite.com/Gemini_Generated_Image_b44mpkb44mpkb44m%20(1).png",
-                category: "sandalia",
-                newArrival: true
-            },
-            {
-                id: "p26",
-                name: "Melissa Edge (COR TRANSLÚCIDA)",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 199.90,
-                image: "https://dlzpblyjxiqfa.cloudfront.net/2243447975/products/2jocbgrzu9uik3wsywpspbah1",
-                category: "sandalia",
-                newArrival: true
-            },
-            // Produtos existentes
-            {
-                id: "p11",
-                name: "Melissa Cozy M Lover Platform Marrom",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 159.90,
-                image: "https://melisseiras.vtexassets.com/arquivos/ids/541086-1200-1200?v=638990831067800000&width=1200&height=1200&aspect=true",
-                category: "sapato",
-                newArrival: true
-            },
-            {
-                id: "p12",
-                name: "Melissa Free Muse Platform",
-                description: "ESTOQUE LIMITADO",
-                price: 9.99,
-                originalPrice: 159.90,
-                image: "https://meninashoes.vtexassets.com/arquivos/ids/532588-1200-1200?v=638935618711630000&width=1200&height=1200&aspect=true",
-                category: "rasteirinha",
-                featured: true
-            }
+            // ===== MAIS VENDIDOS =====
+            { id: "p1", name: "Melissa Free Platform Thong (BRANCO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://cdn.shopify.com/s/files/1/0938/5069/8019/files/cor.36088.36088BE88712_o.webp?v=1745920544", category: "sandalia", featured: true },
+            { id: "p2", name: "Melissa Free Platform Thong (PRETO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://cdn.shopify.com/s/files/1/0938/5069/8019/files/cor.36088.36088BE88612_o.webp?v=1745920408", category: "sandalia", featured: true },
+            { id: "p3", name: "Melissa Free Platform Slide Glitter (PRATA)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://images.tcdn.com.br/img/img_prod/993109/melissa_free_platform_slide_glitter_cinza_71875_1_32296e270b39c5a26a0752a3ad69d310.jpg", category: "sandalia", featured: true },
+            { id: "p4", name: "Melissa Free Platform Slide (BEGE CLARO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://cdn.shopify.com/s/files/1/0938/5069/8019/files/cor.35859.35859AS38412_o.webp?v=1745888594", category: "sandalia", featured: true },
+            { id: "p20", name: "Melissa Pump Platform (BRANCO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 179.90, image: "https://wheat-scorpion-764395.hostingersite.com/ww.melissa.com.br.jpeg", category: "sandalia", featured: true },
+            { id: "p21", name: "Melissa Free Thong Wedge (LILÁS)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 169.90, image: "https://wheat-scorpion-764395.hostingersite.com/knhjk(1).png", category: "sandalia", featured: true },
+            { id: "p22", name: "Melissa Up Platform (CARAMELO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 189.90, image: "https://wheat-scorpion-764395.hostingersite.com/Gemini_Generated_Image_y4oq53y4oq53y4oq%20(1).png", category: "sandalia", featured: true },
+            { id: "p23", name: "Melissa Edge (PRETO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 199.90, image: "https://dlzpblyjxiqfa.cloudfront.net/2243447975/products/woj84g1cjuome0fpdliunpdnc", category: "sandalia", featured: true },
+            { id: "p12", name: "Melissa Free Muse Platform (VARIADO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://meninashoes.vtexassets.com/arquivos/ids/532588-1200-1200?v=638935618711630000&width=1200&height=1200&aspect=true", category: "rasteirinha", featured: true },
+            { id: "p30", name: "Melissa Free Platform Thong (PRETO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://images.tcdn.com.br/img/img_prod/1399296/melissa_free_platform_thong_59_5875_1_20251028172342_d70b565f3583.jpg", category: "sandalia", featured: true },
+            { id: "p31", name: "Melissa Free Line Platform (PRETO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://images.tcdn.com.br/img/img_prod/1399296/melissa_free_line_platform_107_4033_1_20250820231059_839794735e27.jpg", category: "sandalia", featured: true },
+            { id: "p32", name: "Melissa Free Line Platform (BEGE/NUDE)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://images.tcdn.com.br/img/img_prod/1399296/melissa_free_line_platform_107_2_cba0127c310cafbd4c30bd56e81cae31.jpg", category: "sandalia", featured: true },
+            { id: "p33", name: "Melissa Free Line Platform (BEGE)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://meninashoes.vtexassets.com/arquivos/ids/493142/37824-Melissa-Free-Line-Platform-Cor-BN315---BEGE-variacao-3.jpg.jpg", category: "sandalia", featured: true },
+            { id: "p34", name: "Melissa Free Platform Slide (PRETO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://cloviscalcados.vteximg.com.br/arquivos/ids/1314537/Melissa-Free-Platform-Slide-35859-0855859_008-01.jpg", category: "sandalia", featured: true },
+            { id: "p35", name: "Melissa Platform Slide (LILÁS/ROXO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://cdn.awsli.com.br/2503/2503823/produto/297486546/6081-19306-fla7iv73un.jpg", category: "sandalia", featured: true },
+            { id: "p36", name: "Melissa Free Platform (BRANCO/OFF-WHITE)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://meninashoes.vtexassets.com/arquivos/ids/534969-1200-1200?v=638950134693470000", category: "sandalia", featured: true },
+            { id: "p37", name: "Melissa Platform Slide (PRETO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://acdn-us.mitiendanube.com/stores/970/787/products/img_6325-8549c172a6f25c41ac17745313753036-1024-1024.webp", category: "sandalia", featured: true },
+            { id: "p38", name: "Melissa Party Heel (NUDE/BEGE ROSADO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 199.90, image: "https://cloviscalcados.vteximg.com.br/arquivos/ids/1570690/Melissa-Party-Heel-33818-0853818_096-02.jpg", category: "sandalia", featured: true },
+            { id: "p39", name: "Melissa Party Heel (ROSA)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 199.90, image: "https://cloviscalcados.vteximg.com.br/arquivos/ids/1570665/Melissa-Party-Heel-33818-0853818_050-01.jpg", category: "sandalia", featured: true },
+            { id: "p40", name: "Melissa Fashion Heel (PRETO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 199.90, image: "https://n.nordstrommedia.com/id/sr3/ac62cf71-78c5-4d3a-b8c7-427945847923.jpeg", category: "sandalia", featured: true },
+            
+            // ===== NOVIDADES =====
+            { id: "p7", name: "Melissa Free Platform Slide (VERMELHO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://cdn.shopify.com/s/files/1/0938/5069/8019/files/cor.35859.35859BC20212_o.webp?v=1745888637", category: "sandalia", newArrival: true },
+            { id: "p8", name: "Melissa Free Platform Slide (PRETO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://cdn.shopify.com/s/files/1/0938/5069/8019/files/cor.35859.35859AS38312_o.webp?v=1745888564", category: "sandalia", newArrival: true },
+            { id: "p9", name: "Melissa Kick Off Sandal (BEGE)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://cdn.shopify.com/s/files/1/0938/5069/8019/files/cor.32823.32823BA67110_o.webp?v=1745886140", category: "sandalia", newArrival: true },
+            { id: "p10", name: "Melissa Towny (VERDE)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://cdn.shopify.com/s/files/1/0938/5069/8019/files/cor.35964.35964BD58910_o.webp?v=1745899239", category: "sapato", newArrival: true },
+            { id: "p24", name: "Melissa Kick Off Sandal (BRANCO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://wheat-scorpion-764395.hostingersite.com/Gemini_Generated_Image_a7is1a7is1a7is1a-removebg-preview.png", category: "sandalia", newArrival: true },
+            { id: "p25", name: "Melissa Kick Off Sandal (MARROM)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://wheat-scorpion-764395.hostingersite.com/Gemini_Generated_Image_b44mpkb44mpkb44m%20(1).png", category: "sandalia", newArrival: true },
+            { id: "p26", name: "Melissa Edge (TRANSLÚCIDO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 199.90, image: "https://dlzpblyjxiqfa.cloudfront.net/2243447975/products/2jocbgrzu9uik3wsywpspbah1", category: "sandalia", newArrival: true },
+            { id: "p11", name: "Melissa Cozy M Lover Platform (MARROM)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://melisseiras.vtexassets.com/arquivos/ids/541086-1200-1200?v=638990831067800000&width=1200&height=1200&aspect=true", category: "sapato", newArrival: true },
+            { id: "p50", name: "Melissa Kick Off Sandal (VERMELHO)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://meninashoes.vtexassets.com/arquivos/ids/435473/32823-Melissa-Kick-Off-Sandal-Vermelho-Variacao3.jpg", category: "sandalia", newArrival: true },
+            { id: "p51", name: "Melissa Free Platform (BEGE CLARO/OFF-WHITE)", description: "ESTOQUE LIMITADO", price: 9.99, originalPrice: 159.90, image: "https://meninashoes.vtexassets.com/arquivos/ids/535001-1200-1200?v=638950195420570000", category: "sandalia", newArrival: true }
         ];
 
         // STATE
-        const cart = [];
+        let cart = [];
         const overlay = document.getElementById('overlay');
         const cartModal = document.getElementById('cart-modal');
         const cartCount = document.getElementById('cart-count');
@@ -1126,8 +1004,7 @@
         const categoryFilter = document.getElementById('category-filter');
         const sortFilter = document.getElementById('sort-filter');
         
-        // Link do IronPay
-        const IRONPAY_LINK = 'https://ambienteseguuro.com/c/eaccfef385';
+        const IRONPAY_LINK = 'https://checkout-buddy-27.lovable.app/';
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
@@ -1135,38 +1012,30 @@
             setupEventListeners();
         });
 
-        // Renderizar produtos
         function renderProducts() {
-            // Filtrar produtos mais vendidos
             const featuredProducts = products.filter(product => product.featured);
-            
-            // Filtrar novidades
             const newArrivals = products.filter(product => product.newArrival);
             
-            // Renderizar mais vendidos
             bestSellersCarousel.innerHTML = '';
             featuredProducts.forEach(product => {
                 bestSellersCarousel.appendChild(createProductCard(product));
             });
             
-            // Renderizar novidades
             newArrivalsCarousel.innerHTML = '';
             newArrivals.forEach(product => {
                 newArrivalsCarousel.appendChild(createProductCard(product));
             });
         }
 
-        // Criar card de produto
         function createProductCard(product) {
             const card = document.createElement('article');
             card.className = 'product-card';
-            
             const discountPercentage = Math.round((1 - product.price / product.originalPrice) * 100);
             
             card.innerHTML = `
                 <div class="discount-badge">${discountPercentage}%</div>
                 <div class="product-image" data-image="${product.image}">
-                    <img src="${product.image}" alt="${product.name}">
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='https://placehold.co/400x400/ff6fa3/white?text=Melissa'">
                 </div>
                 <div class="product-info">
                     <div class="product-title">${product.name}</div>
@@ -1178,15 +1047,9 @@
                     <div class="size-selector">
                         <select class="size-select" data-id="${product.id}">
                             <option value="">Escolha numeração</option>
-                            <option value="33">33</option>
-                            <option value="34">34</option>
-                            <option value="35">35</option>
-                            <option value="36">36</option>
-                            <option value="37">37</option>
-                            <option value="38">38</option>
-                            <option value="39">39</option>
-                            <option value="40">40</option>
-                            <option value="41">41</option>
+                            <option value="33">33</option><option value="34">34</option><option value="35">35</option>
+                            <option value="36">36</option><option value="37">37</option><option value="38">38</option>
+                            <option value="39">39</option><option value="40">40</option><option value="41">41</option>
                         </select>
                     </div>
                     <div class="product-actions">
@@ -1194,101 +1057,56 @@
                     </div>
                 </div>
             `;
-            
             return card;
         }
 
-        // Configurar event listeners
         function setupEventListeners() {
-            // Carrinho
             document.getElementById('cart-icon').addEventListener('click', openCart);
             document.getElementById('close-cart').addEventListener('click', closeCart);
             overlay.addEventListener('click', closeCart);
-            
-            // Zoom de imagens
             closeZoom.addEventListener('click', closeZoomModal);
-            zoomModal.addEventListener('click', (e) => {
-                if (e.target === zoomModal) {
-                    closeZoomModal();
-                }
-            });
-            
-            // Busca
+            zoomModal.addEventListener('click', (e) => { if (e.target === zoomModal) closeZoomModal(); });
             searchInput.addEventListener('input', handleSearch);
-            
-            // Filtros
             categoryFilter.addEventListener('change', handleFilterChange);
             sortFilter.addEventListener('change', handleFilterChange);
-            
-            // Finalizar compra
             document.getElementById('checkout').addEventListener('click', handleCheckout);
         }
 
-        // Funções do carrinho
-        function openCart(){ 
-            cartModal.classList.add('active'); 
-            overlay.classList.add('active'); 
-        }
-        
-        function closeCart(){ 
-            cartModal.classList.remove('active'); 
-            overlay.classList.remove('active'); 
-        }
-        
-        function openZoom(imageSrc) {
-            zoomImage.src = imageSrc;
-            zoomModal.classList.add('active');
-        }
-        
-        function closeZoomModal() {
-            zoomModal.classList.remove('active');
-        }
-        
-        function scrollToProducts() {
-            document.getElementById('products-section').scrollIntoView({behavior: 'smooth'});
-        }
+        function openCart(){ cartModal.classList.add('active'); overlay.classList.add('active'); }
+        function closeCart(){ cartModal.classList.remove('active'); overlay.classList.remove('active'); }
+        function openZoom(imageSrc) { zoomImage.src = imageSrc; zoomModal.classList.add('active'); }
+        function closeZoomModal() { zoomModal.classList.remove('active'); }
+        function scrollToProducts() { document.getElementById('products-section').scrollIntoView({behavior: 'smooth'}); }
 
-        // Adicionar ao carrinho (delegation)
         document.addEventListener('click', function(e) {
-            // Adicionar ao carrinho
             if (e.target.classList.contains('add-to-cart')) {
                 const id = e.target.dataset.id;
                 const name = e.target.dataset.name;
                 const price = parseFloat(e.target.dataset.price);
                 const image = e.target.dataset.image;
-                
-                // Obter a numeração selecionada
                 const sizeSelect = document.querySelector(`.size-select[data-id="${id}"]`);
                 const selectedSize = sizeSelect ? sizeSelect.value : '';
                 
-                // Verificar se foi selecionada uma numeração
                 if (!selectedSize) {
                     alert('Por favor, escolha uma numeração antes de adicionar ao carrinho.');
                     return;
                 }
 
                 const existing = cart.find(i => i.id === id && i.size === selectedSize);
-                if (existing) {
-                    existing.qty += 1;
-                } else {
-                    cart.push({id, name, price, image, qty: 1, size: selectedSize});
-                }
-
+                if (existing) { existing.qty += 1; } 
+                else { cart.push({id, name, price, image, qty: 1, size: selectedSize}); }
                 updateCartUI();
                 openCart();
-                
                 e.target.textContent = "✓ Adicionado";
                 setTimeout(() => e.target.textContent = "Adicionar", 1200);
             }
             
-            // Zoom de imagem
             if (e.target.closest('.product-image')) {
                 const imageSrc = e.target.closest('.product-image').getAttribute('data-image');
                 openZoom(imageSrc);
             }
         });
 
-        // Atualizar interface do carrinho
         function updateCartUI() {
             cartItemsContainer.innerHTML = '';
             let total = 0;
@@ -1300,11 +1118,10 @@
                 cart.forEach(item => {
                     total += item.price * item.qty;
                     items += item.qty;
-
                     const div = document.createElement('div');
                     div.className = 'cart-item';
                     div.innerHTML = `
-                        <img src="${item.image}" alt="${item.name}">
+                        <img src="${item.image}" alt="${item.name}" onerror="this.src='https://placehold.co/400x400/ff6fa3/white?text=Melissa'">
                         <div class="cart-item-info">
                             <h4>${item.name}</h4>
                             <div class="cart-price">R$ ${item.price.toFixed(2).replace('.',',')}</div>
@@ -1324,16 +1141,12 @@
             cartCount.innerText = items;
             cartTotalEl.innerText = `R$ ${total.toFixed(2).replace('.',',')}`;
 
-            // Controles de quantidade
             document.querySelectorAll('.qty-increase').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const id = btn.dataset.id;
                     const size = btn.dataset.size;
-                    const item = cart.find(i => i.id === id && i.size === size); 
-                    if (item) { 
-                        item.qty += 1; 
-                        updateCartUI(); 
-                    }
+                    const item = cart.find(i => i.id === id && i.size === size);
+                    if (item) { item.qty += 1; updateCartUI(); }
                 });
             });
             
@@ -1343,12 +1156,8 @@
                     const size = btn.dataset.size;
                     const item = cart.find(i => i.id === id && i.size === size);
                     if (item) {
-                        if (item.qty > 1) {
-                            item.qty -= 1;
-                        } else {
-                            const index = cart.findIndex(x => x.id === id && x.size === size);
-                            if (index >= 0) cart.splice(index, 1);
-                        }
+                        if (item.qty > 1) { item.qty -= 1; } 
+                        else { const index = cart.findIndex(x => x.id === id && x.size === size); if (index >= 0) cart.splice(index, 1); }
                         updateCartUI();
                     }
                 });
@@ -1365,91 +1174,44 @@
             });
         }
 
-        // Busca
         function handleSearch() {
             const searchTerm = searchInput.value.toLowerCase();
-            
-            // Filtrar produtos
             const filteredProducts = products.filter(product => 
                 product.name.toLowerCase().includes(searchTerm) || 
                 product.description.toLowerCase().includes(searchTerm)
             );
-            
-            // Atualizar exibição
             updateProductDisplay(filteredProducts);
         }
 
-        // Filtros
         function handleFilterChange() {
             const category = categoryFilter.value;
             const sort = sortFilter.value;
-            
             let filteredProducts = [...products];
-            
-            // Filtrar por categoria
-            if (category !== 'all') {
-                filteredProducts = filteredProducts.filter(product => product.category === category);
-            }
-            
-            // Ordenar
+            if (category !== 'all') { filteredProducts = filteredProducts.filter(product => product.category === category); }
             switch(sort) {
-                case 'newest':
-                    filteredProducts.sort((a, b) => (a.newArrival === b.newArrival) ? 0 : a.newArrival ? -1 : 1);
-                    break;
-                case 'price-low':
-                    filteredProducts.sort((a, b) => a.price - b.price);
-                    break;
-                case 'price-high':
-                    filteredProducts.sort((a, b) => b.price - a.price);
-                    break;
-                // 'featured' é o padrão
+                case 'newest': filteredProducts.sort((a, b) => (a.newArrival === b.newArrival) ? 0 : a.newArrival ? -1 : 1); break;
+                case 'price-low': filteredProducts.sort((a, b) => a.price - b.price); break;
+                case 'price-high': filteredProducts.sort((a, b) => b.price - a.price); break;
             }
-            
-            // Atualizar exibição
             updateProductDisplay(filteredProducts);
         }
 
-        // Atualizar exibição de produtos
         function updateProductDisplay(filteredProducts) {
-            // Limpar carrosséis
             bestSellersCarousel.innerHTML = '';
             newArrivalsCarousel.innerHTML = '';
-            
-            // Separar produtos por categoria
             const featuredProducts = filteredProducts.filter(product => product.featured);
             const newArrivals = filteredProducts.filter(product => product.newArrival);
-            
-            // Adicionar produtos aos carrosséis
-            featuredProducts.forEach(product => {
-                bestSellersCarousel.appendChild(createProductCard(product));
-            });
-            
-            newArrivals.forEach(product => {
-                newArrivalsCarousel.appendChild(createProductCard(product));
-            });
-            
-            // Se não houver produtos em uma categoria, mostrar mensagem
-            if (featuredProducts.length === 0) {
-                bestSellersCarousel.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text)">Nenhum produto encontrado</div>';
-            }
-            
-            if (newArrivals.length === 0) {
-                newArrivalsCarousel.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text)">Nenhum produto encontrado</div>';
-            }
+            featuredProducts.forEach(product => { bestSellersCarousel.appendChild(createProductCard(product)); });
+            newArrivals.forEach(product => { newArrivalsCarousel.appendChild(createProductCard(product)); });
+            if (featuredProducts.length === 0) { bestSellersCarousel.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text)">Nenhum produto encontrado</div>'; }
+            if (newArrivals.length === 0) { newArrivalsCarousel.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text)">Nenhum produto encontrado</div>'; }
         }
 
-        // Finalizar compra
         function handleCheckout() {
-            if (cart.length === 0) { 
-                alert('Seu carrinho está vazio. Adicione produtos antes de finalizar.'); 
-                return; 
-            }
-            
-            // Redireciona para o IronPay
+            if (cart.length === 0) { alert('Seu carrinho está vazio. Adicione produtos antes de finalizar.'); return; }
             window.location.href = IRONPAY_LINK;
         }
 
-        // Inicializar carrinho vazio
         updateCartUI();
     </script>
 </body>
